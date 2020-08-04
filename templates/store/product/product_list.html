@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<div id="sidebar">
+    <h3>Filter:</h3>
+    <form method="get">
+        {{ myFilter.form|crispy }}
+    <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+
+
+
+<div id="main" class="product-list">
+    <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
+        {% for product in products %}
+        <div class="item" style="width: 18rem;">
+            {% thumbnail product.image "125x125" as im %}
+               <a href="{{ product.get_absolute_url }}">
+                <img class="card-img-top" src="{% if product.image %}{{ im.url }}{% else %}{% endif %}" alt="Card image cap">
+               </a>
+            {% endthumbnail %}
+            <div class="card-body">
+            <h5 class="card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+            <h6>{{ product.description }}</h6>
+{#                <div class="def-number-input number-input safari_only text-center mb-4">#}
+{#                  <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>#}
+{#                  <input class="quantity" min="0" name="quantity" value="1" type="number">#}
+{#                  <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>#}
+{#                </div>#}
+            </div>
+        </div>
+        {% endfor %}
+</div>
+</section>
+{% endblock %}
