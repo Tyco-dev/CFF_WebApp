@@ -24,7 +24,7 @@ SECRET_KEY = ''
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.2', '127.0.0.1']
+ALLOWED_HOSTS = ""
 
 
 # Application definition
@@ -141,7 +141,7 @@ USE_TZ = True
 
 ACCOUNT_EMAIL_REQUIRED = True
 
-# GOOGLE_API_KEY = 'AIzaSyDhul0fEnd46rO6D1pOqaDY7A81N1k8U1Y'
+# GOOGLE_API_KEY = ''
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
