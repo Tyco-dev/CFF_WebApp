@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block content %}
+<div class="container align-self-center">
   <h1>Your shopping cart</h1>
+<div class="table-responsive">
   <table class="cart">
     <thead>
       <tr>
@@ -33,13 +35,13 @@
               <form action="{% url "cart:cart_add" product.id %}" method="post">
                 {{ item.update_quantity_form.quantity }}
                 {{ item.update_quantity_form.override }}
-                <input type="submit" value="Update">
+                <button type="submit" class="btn btn-primary btn-sm">Update</button>
                 {% csrf_token %}
               </form>
             </td>
             <td>
-              <form action="{% url "cart:cart_remove" product.id %}" method="post">
-                <input type="submit" value="Remove">
+              <form class=action="{% url "cart:cart_remove" product.id %}" method="post">
+                  <button type="submit" class="btn btn-secondary btn-sm">Remove</button>
                 {% csrf_token %}
               </form>
             </td>
@@ -55,11 +57,14 @@
       </tr>
     </tbody>
   </table>
-  <p class="text-right">
-    <a href="{% url "product_list" %}" class="button
+</div>
+
+  <p class="container">
+    <a href="{% url "product_list" %}" class="btn btn-secondary
     light">Continue shopping</a>
-    <a href="{% url "orders:order_create" %}" class="button">
+    <a href="{% url "orders:order_create" %}" class="btn btn-primary" >
       Checkout
     </a>
   </p>
+</div>
 {% endblock %}

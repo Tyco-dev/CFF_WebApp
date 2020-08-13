@@ -12,7 +12,7 @@
         <a class="nav-link" href="{% url 'product_list' %}">Catalog</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Order</a>
+        <a class="nav-link" href="{% url 'orders:order_list' %}">Orders</a>
       </li>
     </ul>
     {% if request.user.is_authenticated %}
@@ -28,11 +28,11 @@
             Your cart is empty.
           {% endif %}
         {% endwith %}
-      </span>
-        <span class="navbar-text">
+        </span>
+        <span class="navbar-text align-items-center">
           Hello, <a style="margin-right: 15px" href="{% url 'profile' %}">{{ user.username }}</a>
         </span>
-        <span class="navbar-text">
+        <span class="navbar-text align-items-center">
           <a style="color: lightgrey" href="{% url 'account_logout' %}">Sign Out</a>
         </span>
     {% else %}

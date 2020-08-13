@@ -3,6 +3,9 @@ from .models import Product, Manufacturer, Type, Category
 
 # Register your models here.
 
+admin.site.site_header = 'TTS Admin'
+admin.site.site_title = 'CFF'
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']

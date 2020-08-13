@@ -4,7 +4,6 @@
 {% include 'head.html' %}
 {% include 'navbar.html' %}
 <body>
-<main role="main" class="container">
     <div class="row">
         <div class="col-md-8">
         {% if messages %}
@@ -14,13 +13,12 @@
               </div>
             {% endfor %}
         {% endif %}
-
+        </div>
+    </div>
         {% block content %}
 
         {% endblock %}
-        </div>
-    </div>
-</main>
 {% include 'scripts.html' %}
 </body>
+{% include 'footer.html' %}
 </html>

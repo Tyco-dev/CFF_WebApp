@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container align-self-center">
+    <div class="side-panel" style="margin-top: 20px">
+        <h5><b>Order #:  </b><br/>{{ order.order_id }}</h5>
+        <h5><b>Delivery Date:  </b><br/>{{ order.delivery_date }}</h5>
+        <h5><b>Location:  </b><br/>{{ order.location }}</h5>
+        <h5><b>Route:  </b><br/>{{ order.location.route }}</h5>
+        <h5><b>Paid:  </b><br/>{{ order.paid }}</h5></h>
+    </div>
+
+
+    <table class="table-bordered" style="margin-top: 20px">
+        <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in order_item %}
+            <tr>
+              <td>{{ item.product.name }}</td>
+              <td>{{ item.quantity }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

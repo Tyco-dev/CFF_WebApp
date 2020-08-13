@@ -1,13 +1,17 @@
-import uuid, datetime
-from decimal import Decimal
-from phone_field import PhoneField
-from store.models import Product
-from django.db import models
-from django.contrib.auth.models import User
+import datetime
+
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.urls import reverse
+from django_localflavor_us.models import USStateField
+from phone_field import PhoneField
+
+from store.models import Product
 
 
 # Create your models here.
+
 
 class Company(models.Model):
     name = models.CharField(max_length=100)
@@ -16,12 +20,32 @@ class Company(models.Model):
         return self.name
 
 
+class Route(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Address(models.Model):
+    label = models.CharField(max_length=200)
+    street_address = models.CharField(max_length=200)
+    city = models.CharField(max_length=20)
+    state = USStateField(default="OH")
+    zip_code = models.IntegerField()
+
+    def __str__(self):
+        return self.label
+
+
 class Location(models.Model):
     name = models.CharField(max_length=100)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     store_Number = models.CharField(max_length=10, blank=True, null=True)
     contact_name = models.CharField(max_length=50, blank=True, null=True)
     contact_number = PhoneField(blank=True, null=True)
+    route = models.ForeignKey(Route, on_delete=models.DO_NOTHING)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name}"
@@ -47,79 +71,44 @@ def increment_order_id():
 
 
 class Order(models.Model):
-    NOTPAID = 0
-    PAID = 1
-    PARTPAID = 2
-
-    PAYMENT_STATUS = (
-        (NOTPAID, 'Not Paid'),
-        (PARTPAID, 'Partial Paid'),
-        (PAID, 'Paid'),
-    )
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=20, default=increment_order_id, null=True, blank=True, editable=False)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    route = models.ForeignKey(Route, on_delete=models.DO_NOTHING, null=True, blank=True)
     delivery_date = models.DateField()
     created = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
-    payment_status = models.IntegerField(default=NOTPAID, choices=PAYMENT_STATUS, null=False)
+    updated = models.DateTimeField(auto_now=True)
+    paid = models.BooleanField(default=False)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
-        ordering = ('-created', '-id')
+        ordering = ('-delivery_date',)
 
     def __str__(self):
-        return '%s' % (self.order_id)
+        return f'Order {self.id}'
 
-    def subtotal(self):
-        total = Decimal('0.00').quantize(Decimal('0.01'))
-        for item in self.orderitems.all().filter(status=True):
-            total = total + Decimal(item.subtotal()).quantize(Decimal('0.01'))
-        return str(total)
+    def get_absolute_url(self):
+        return reverse('orders:order_detail',
+                       args=[self.order_id])
 
-    def total(self):
-        total = Decimal('0.00').quantize(Decimal('0.01'))
-        for item in self.orderitems.all().filter(status=True):
-            total = total + Decimal(item.total()).quantize(Decimal('0.01'))
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.items.all())
 
-        return str(total - self.discount)
+    def count_items(self):
+        return self.items.count()
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT,
-                              related_name='orderitems', null=True)
-    desc = models.CharField(max_length=500, null=True)
+                              related_name='items')
+    description = models.CharField(max_length=500, blank=True)
     # Item
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, related_name='order_items')
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.IntegerField(default=1, null=False)
-    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-
-    # Records
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '%s' % (self.id)
+        return str(self.id)
 
-    def description(self):
-        # If items is linked, return item's description
-        if self.product:
-            return str(self.product.name)
-        else:
-            return 'Order Item'
-
-    def subtotal(self):
-        total = ((self.price * Decimal(self.quantity)).quantize(
-            Decimal('0.01')) - self.discount)
-        return str(total)
-
-    def taxtotal(self):
-        subtotal = Decimal(self.subtotal()).quantize(Decimal('0.01'))
-        total = subtotal
-        return str(Decimal(total).quantize(Decimal('0.01')))
-
-    def total(self):
-        total = Decimal(self.subtotal()).quantize(Decimal('0.01')).quantize(Decimal('0.01'))
-        return str(total)
+    def get_cost(self):
+        return self.price * self.quantity

@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block content %}
+<div class="container align-self-center">
   <h1>Thank you</h1>
   <p>Your order has been successfully completed. Your order number is
-  <strong>{{ order.order_id }}</strong>.</p>
+      <strong><a href="{% url 'orders:order_detail' order.order_id %}">{{ order.order_id }}</a></strong>.</p>
+</div>
 {% endblock %}

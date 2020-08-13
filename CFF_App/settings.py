@@ -24,9 +24,8 @@ SECRET_KEY = ''
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.2', '127.0.0.1']
 
-SITE_ID = 1
 
 # Application definition
 
@@ -56,12 +55,14 @@ INSTALLED_APPS = [
     'phone_field',
     'sorl.thumbnail',
     'django_filters',
-    'rangefilter'
+    'rangefilter',
+    'django_localflavor_us',
+    # 'address',
 
 ]
 
 CART_SESSION_ID = 'cart'
-
+SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -140,7 +141,10 @@ USE_TZ = True
 
 ACCOUNT_EMAIL_REQUIRED = True
 
+# GOOGLE_API_KEY = 'AIzaSyDhul0fEnd46rO6D1pOqaDY7A81N1k8U1Y'
+
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
