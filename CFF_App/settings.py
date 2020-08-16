@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-django_heroku.settings(locals())
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'aAdgf354^gfw3F#$^2das'
@@ -27,7 +27,7 @@ SECRET_KEY = 'aAdgf354^gfw3F#$^2das'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ""
+ALLOWED_HOSTS = ".herokuapp.com"
 
 
 # Application definition
@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'django_filters',
     'rangefilter',
     'django_localflavor_us',
+    'whitenoise',
+
     # 'address',
 
 ]
@@ -67,6 +69,7 @@ INSTALLED_APPS = [
 CART_SESSION_ID = 'cart'
 SITE_ID = 1
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,6 +124,7 @@ DATABASES = {
 
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -161,6 +165,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
