@@ -27,7 +27,7 @@ SECRET_KEY = 'aAdgf354^gfw3F#$^2das'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ".herokuapp.com"
+ALLOWED_HOSTS = "cff-web-app.herokuapp.com"
 
 
 # Application definition
