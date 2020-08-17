@@ -40,7 +40,7 @@
               </form>
             </td>
             <td>
-              <form class=action="{% url "cart:cart_remove" product.id %}" method="post">
+              <form action="{% url "cart:cart_remove" product.id %}" method="post">
                   <button type="submit" class="btn btn-secondary btn-sm">Remove</button>
                 {% csrf_token %}
               </form>
