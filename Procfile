@@ -1,1 +1,1 @@
-web: gunicorn CFF_App.wsgi
+web: gunicorn CFF_App.wsgi --log-file -
