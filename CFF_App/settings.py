@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = ''
+SECRET_KEY = 'd#45gjhFGd^78s#%^hn^&**2dfhjkm'
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
@@ -33,7 +33,7 @@ SECRET_KEY = ''
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 
-ALLOWED_HOSTS = [']
+ALLOWED_HOSTS = ['https://cff-web-app.herokuapp.com/']
 
 
 # Application definition
