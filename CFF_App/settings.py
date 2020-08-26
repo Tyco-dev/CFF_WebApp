@@ -33,7 +33,7 @@ SECRET_KEY = ''
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 
-ALLOWED_HOSTS = [']
+ALLOWED_HOSTS = ['https://cff-web-app.herokuapp.com/']
 
 
 # Application definition
